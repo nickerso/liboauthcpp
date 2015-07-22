@@ -281,6 +281,13 @@ bool Client::buildOAuthTokenKeyValuePairs( const bool includeOAuthVerifierPin,
         generateNonceTimeStamp();
     }
 
+    /* Callback URL */
+    if (mCallbackUrl.length())
+    {
+        // Callback URL string should always be escaped
+        ReplaceOrInsertKeyValuePair(keyValueMap, Defaults::CALLBACK_KEY, HttpEncodeQueryValue(mCallbackUrl));
+    }
+
     /* Consumer key and its value */
     ReplaceOrInsertKeyValuePair(keyValueMap, Defaults::CONSUMERKEY_KEY, value_encoder(mConsumer->key()));
 
@@ -531,6 +538,7 @@ std::string Client::buildOAuthParameterString(
     if (string_type == AuthorizationHeaderString) {
         KeyValuePairs oauthKeyValuePairs;
         std::vector<std::string> oauth_keys;
+        oauth_keys.push_back(Defaults::CALLBACK_KEY);
         oauth_keys.push_back(Defaults::CONSUMERKEY_KEY);
         oauth_keys.push_back(Defaults::NONCE_KEY);
         oauth_keys.push_back(Defaults::SIGNATURE_KEY);
@@ -617,5 +625,9 @@ bool Client::getStringFromOAuthKeyValuePairs( const KeyValuePairs& rawParamMap,
     return ( rawParams.length() ) ? true : false;
 }
 
+void Client::setCallbackUrl(const std::string& callbackUrl)
+{
+    mCallbackUrl = callbackUrl;
+}
 
 } // namespace OAuth

@@ -230,6 +230,16 @@ public:
                          const std::string& rawUrl,
                          const std::string& rawData = "",
                          const bool includeOAuthVerifierPin = false);
+
+    /**
+     * Set an OAuth callback URL. You can use this method during
+     *  authentication process for OAuth callback. This URL value should be
+     *  emptied after authentication not to give redundant URL information.
+     *
+     *  \param callbackUrl Callback url to be accessed during authentication
+     */
+    void setCallbackUrl(const std::string& callbackUrl);
+
 private:
     /** Disable default constructur -- must provide consumer
      * information.
@@ -243,6 +253,7 @@ private:
     /* OAuth data */
     const Consumer* mConsumer;
     const Token* mToken;
+    std::string mCallbackUrl;
     std::string m_nonce;
     std::string m_timeStamp;
 
